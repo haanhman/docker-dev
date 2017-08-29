@@ -10,7 +10,7 @@ services:
     links:
       - php-fpm
   php-fpm:
-    image: php:7.1.8-fpm
+    image: anhmantk/php-fpm
     volumes:
       - ./www/:/var/www
     links:
