@@ -1,0 +1,43 @@
+version: '2'
+services:
+  nginx:
+    image: nginx
+    volumes:
+      - ./nginx/conf.d/:/etc/nginx/conf.d
+      - ./www/:/var/www
+    ports:
+      - "80:80"
+    links:
+      - php-fpm
+  php-fpm:
+    image: php:7.1.8-fpm
+    volumes:
+      - ./www/:/var/www
+    links:
+      - mariadb
+      - redis
+  redis:
+    image: redis
+    ports:
+      - "6389:6389"
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - "8080:80"
+    environment:
+      MYSQL_USER: homestead
+      MYSQL_PASSWORD: secret
+      PMA_HOST: mariadb
+    links:
+      - mariadb
+  mariadb:
+    image: mariadb
+    environment:
+      MYSQL_DATABASE: homestead
+      MYSQL_USER: homestead
+      MYSQL_PASSWORD: secret
+      MYSQL_ROOT_PASSWORD: root1234
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mysql_data:/var/lib/mysql
